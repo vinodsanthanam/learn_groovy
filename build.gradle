@@ -1,0 +1,23 @@
+apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+  groovy group: 'org.codehaus.groovy', name: 'groovy', version: '1.7.10'
+}
+
+task execcompiledgroovy(dependsOn: compileGroovy) << {
+ println "Hello World from Gradle"
+ ant.java(classname: 'SampleGroove', fork: false, 
+          classpath: "${sourceSets.main.runtimeClasspath.asPath}")
+ //println "classpath is : ${sourceSets.main.runtimeClasspath.asPath}"
+}
+
+
+task execgroovyfromfile << {
+  def pathToFolderOfScript = './src/main/groovy/'
+  def gse = new GroovyScriptEngine([pathToFolderOfScript] as String[])
+  gse.run('sample.groovy', new Binding())
+}
